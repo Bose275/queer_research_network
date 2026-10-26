@@ -43,3 +43,77 @@
 .profile-page a { text-decoration: underline; }
 .profile-main p { margin-block: 0 18px; }
 .profile-main h2 { font-family: 'Fraunces', Georgia, serif; }
+
+.researcher-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.researcher-add-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.researcher-add-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.researcher-add-row button {
+  padding: 0.75rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: #28123d;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  white-space: nowrap;
+}
+
+.researcher-add-row button:hover {
+  background: #49275e;
+}
+
+.researcher-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.researcher-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: #f4f0f6;
+}
+
+.researcher-list li span {
+  overflow-wrap: anywhere;
+}
+
+.researcher-list li button {
+  border: none;
+  background: transparent;
+  color: #702b65;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.researcher-error {
+  color: #a52a40;
+}
+
+@media (max-width: 480px) {
+  .researcher-add-row {
+    flex-direction: column;
+  }
+}

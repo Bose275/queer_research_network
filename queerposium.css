@@ -128,7 +128,7 @@ main > section:nth-of-type(even)::before {
 }
 
 .poster-frame {
-  width: min(100%, 900px);
+  width: min(100%, 500px);
   margin-inline: auto;
   overflow: hidden;
   border: 1.5px solid var(--ink);

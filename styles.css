@@ -470,4 +470,12 @@ h3 {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+
+  .person-card:target {
+  outline: 3px solid #7b2cff;
+  outline-offset: 5px;
+  scroll-margin-top: 24px;
+}
+  
 }

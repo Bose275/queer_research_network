@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,13 +14,13 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="research-form.css">
+  <link rel="stylesheet" href="researcher-selector.css">
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="submit-research.js"></script>
 </head>
 
 <body class="profile-page">
-
   <a class="profile-skip" href="#research-main">Skip to form</a>
 
   <header class="profile-header">
@@ -30,10 +29,8 @@
   </header>
 
   <main id="research-main" class="profile-main">
-
     <p class="profile-eyebrow">Connect · Collaborate · Elevate</p>
-
-    <h1>Future work: migrate this to a microsoft form</h1>
+    <h1>Submit your research</h1>
 
     <p class="profile-intro">
       From student projects to community-led research, we want to celebrate
@@ -46,9 +43,7 @@
     </p>
 
     <noscript>
-      <p class="profile-notice">
-        Please enable JavaScript to submit this form.
-      </p>
+      <p class="profile-notice">Please enable JavaScript to submit this form.</p>
     </noscript>
 
     <p
@@ -60,22 +55,15 @@
     >Connecting to the submission form…</p>
 
     <form id="research-form">
-
       <!-- YOUR RESEARCH -->
       <fieldset disabled>
         <legend>Your research</legend>
-
         <p class="profile-help">Fields marked * are required.</p>
 
         <div class="profile-form-grid">
-
           <label class="profile-wide">
             Project title *
-            <input
-              name="title"
-              required
-              maxlength="250"
-            >
+            <input name="title" required maxlength="250">
           </label>
 
           <label>
@@ -94,23 +82,50 @@
           <label>
             Institution or organization
             <span class="profile-optional">(optional)</span>
-            <input
-              name="institution"
-              maxlength="200"
-            >
+            <input name="institution" maxlength="200">
           </label>
 
-          <label class="profile-wide">
-            Researcher or team names *
-            <textarea
+          <!-- Search existing profiles, or enter an unlinked name. -->
+          <div class="profile-wide researcher-field">
+            <label for="researcher-input">Researchers or teams *</label>
+            <small id="researcher-help">
+              Type a name to find an existing profile, or click + Add name if
+              no profile appears. Each name will appear publicly.
+            </small>
+
+            <div class="researcher-add-row">
+              <input
+                id="researcher-input"
+                type="text"
+                maxlength="150"
+                autocomplete="off"
+                placeholder="Start typing a researcher or team name"
+                aria-describedby="researcher-help researcher-error"
+                aria-controls="researcher-results"
+              >
+              <button id="add-researcher" type="button">+ Add name</button>
+            </div>
+
+            <div id="researcher-results" class="researcher-results" hidden>
+              <p
+                id="researcher-search-status"
+                class="researcher-search-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+              <ul id="researcher-suggestions" class="researcher-suggestions"></ul>
+            </div>
+
+            <ul id="researcher-list" class="researcher-list" aria-live="polite"></ul>
+            <small id="researcher-error" class="researcher-error" role="alert"></small>
+
+            <!-- Keep legacy field for compatibility with current submissions. -->
+            <input
+              type="hidden"
+              id="researcher-names-hidden"
               name="researcher_names"
-              required
-              rows="3"
-              maxlength="3020"
-              placeholder="One person or team per line"
-            ></textarea>
-            <small>These names will appear publicly.</small>
-          </label>
+            >
+          </div>
 
           <label class="profile-wide">
             Short summary *
@@ -127,10 +142,7 @@
               A brief, plain-language introduction to your work.
               This appears on your research card.
             </small>
-            <small
-              id="summary-count"
-              class="profile-counter"
-            >0 / 600 characters</small>
+            <small id="summary-count" class="profile-counter">0 / 600 characters</small>
           </label>
 
           <label class="profile-wide">
@@ -144,24 +156,16 @@
             ></textarea>
             <small>Please leave out confidential details.</small>
           </label>
-
         </div>
       </fieldset>
 
       <!-- RESEARCH TOPICS -->
       <fieldset disabled>
         <legend>Research topics</legend>
-
         <p class="profile-help">
           Choose topics, disciplines, or approaches that fit your work.
         </p>
-
-        <div
-          id="tag-options"
-          class="profile-tag-options"
-          aria-live="polite"
-        ></div>
-
+        <div id="tag-options" class="profile-tag-options" aria-live="polite"></div>
         <label>
           Other topics
           <span class="profile-optional">(optional)</span>
@@ -172,28 +176,17 @@
             placeholder="Separate with commas, e.g. queer art, housing, mental health"
           ></textarea>
         </label>
-
       </fieldset>
 
       <!-- CONTACT -->
       <fieldset disabled>
         <legend>Contact for review</legend>
-
         <div class="profile-form-grid">
-
           <label class="profile-wide">
             Your name *
-            <input
-              name="submitter_name"
-              required
-              maxlength="150"
-              autocomplete="name"
-            >
-            <small>
-              For contacting you about your submission only.
-            </small>
+            <input name="submitter_name" required maxlength="150" autocomplete="name">
+            <small>For contacting you about your submission only.</small>
           </label>
-
           <label class="profile-wide">
             Contact email *
             <input
@@ -204,24 +197,16 @@
               autocomplete="email"
               aria-describedby="email-help"
             >
-            <small id="email-help">
-              Kept private. No mailing list signup.
-            </small>
+            <small id="email-help">Kept private. No mailing list signup.</small>
           </label>
-
         </div>
       </fieldset>
 
       <!-- CONSENT -->
       <fieldset disabled>
         <legend>Permission to publish</legend>
-
         <label class="profile-checkbox">
-          <input
-            name="consent_to_publish"
-            type="checkbox"
-            required
-          >
+          <input name="consent_to_publish" type="checkbox" required>
           <span>
             I am authorized to share this work and consent to the
             Queer Research Network publishing the submitted project
@@ -233,29 +218,18 @@
         <div class="profile-honeypot" aria-hidden="true">
           <label>
             Leave this field empty
-            <input
-              name="company_website"
-              tabindex="-1"
-              autocomplete="off"
-            >
+            <input name="company_website" tabindex="-1" autocomplete="off">
           </label>
         </div>
-
       </fieldset>
 
       <!-- SUBMIT -->
       <div class="profile-actions">
-        <button
-          id="research-submit"
-          type="submit"
-          disabled
-        >
-          Submit for review
-          <span aria-hidden="true">→</span>
+        <button id="research-submit" type="submit" disabled>
+          Submit for review <span aria-hidden="true">→</span>
         </button>
         <span>Your project appears after approval.</span>
       </div>
-
     </form>
 
     <!-- SUCCESS -->
@@ -266,19 +240,13 @@
       tabindex="-1"
       aria-labelledby="success-heading"
     >
-      <h2 id="success-heading">
-        Thanks for sharing your work.
-      </h2>
+      <h2 id="success-heading">Thanks for sharing your work.</h2>
       <p>
         Your research has been submitted for review.
         It will appear on the research page after approval.
       </p>
-      <a href="research.html">
-        Explore the research ↗
-      </a>
+      <a href="research.html">Explore the research ↗</a>
     </section>
-
   </main>
-
 </body>
 </html>

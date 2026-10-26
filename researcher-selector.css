@@ -1,0 +1,85 @@
+/* Load after research-form.css. Styling for the project researcher selector. */
+.researcher-field {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+
+.researcher-add-row {
+  display: flex;
+  align-items: stretch;
+  gap: .65rem;
+}
+.researcher-add-row input { flex: 1; min-width: 0; }
+.researcher-add-row button {
+  border: 0;
+  border-radius: 8px;
+  background: #28123d;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  padding: .65rem 1rem;
+  cursor: pointer;
+}
+.researcher-add-row button:disabled { cursor: not-allowed; opacity: .5; }
+
+.researcher-results {
+  border: 1px solid #d9cce1;
+  border-radius: 10px;
+  background: #fff;
+  padding: .5rem;
+}
+.researcher-results[hidden] { display: none; }
+.researcher-search-status {
+  margin: .25rem .45rem .5rem;
+  font-size: .9rem;
+  color: #51445a;
+}
+.researcher-suggestions,
+.researcher-list { list-style: none; padding: 0; margin: 0; }
+.researcher-suggestions { display: grid; gap: .3rem; }
+.researcher-suggestion {
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: #f6f2f8;
+  color: #28123d;
+  padding: .7rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+  gap: .2rem;
+  font: inherit;
+  cursor: pointer;
+}
+.researcher-suggestion:hover,
+.researcher-suggestion:focus-visible { background: #e9deef; }
+.researcher-suggestion small { color: #61536a; }
+
+.researcher-list { display: grid; gap: .45rem; }
+.researcher-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 8px;
+  background: #f6f2f8;
+  padding: .7rem .85rem;
+}
+.researcher-list li > div { display: grid; gap: .15rem; min-width: 0; }
+.researcher-list li span { overflow-wrap: anywhere; font-weight: 600; }
+.researcher-list li small { color: #61536a; }
+.researcher-list li small.researcher-linked { color: #226a50; }
+.researcher-list li button {
+  border: 0;
+  background: transparent;
+  color: #702b65;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.researcher-error { color: #a52a40; }
+@media (max-width: 480px) {
+  .researcher-add-row { flex-direction: column; }
+}

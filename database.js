@@ -269,8 +269,11 @@ async function loadPeople() {
       // Final card
       // --------------------------------------------
 
-      return `
-        <article class="person-card">
+        return `
+          <article
+            class="person-card"
+            id="person-${escapeHTML(person.slug)}"
+          >
 
           ${portraitHTML}
 
@@ -305,6 +308,35 @@ async function loadPeople() {
       `;
     })
     .join("");
+
+
+// Navigate directly to a researcher after their
+// profile cards have finished loading.
+
+const targetId = decodeURIComponent(
+  window.location.hash.slice(1)
+);
+
+if (targetId.startsWith('person-')) {
+  const target = document.getElementById(targetId);
+
+  if (target) {
+    target.tabIndex = -1;
+
+    requestAnimationFrame(() => {
+      target.scrollIntoView({
+        behavior: 'auto',
+        block: 'center'
+      });
+
+      target.focus({
+        preventScroll: true
+      });
+    });
+  }
+}
+
+
 }
 
 
