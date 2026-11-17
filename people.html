@@ -11,517 +11,179 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <!-- Place beside index.html and your existing styles.css. Do not load database.js here. -->
-  <style>
-    [hidden] { display: none !important; }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .people-hero h1 { margin: 0; font-family: var(--serif); line-height: 1.12; letter-spacing: -.04em; }
-    .people-intro p { margin: 0; }
-    .people-hero { padding-block: 68px 64px; border-bottom: 1px solid var(--line); }
-    .people-hero-grid { display: grid; grid-template-columns: 1.2fr .7fr; gap: 7vw; align-items: end; }
-    .people-eyebrow { margin-bottom: 20px !important; font-size: .8125rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-    .people-hero h1 { font-size: clamp(3.2rem, 6.8vw, 6.5rem); }
-    .people-hero h1 em { color: var(--purple); }
-    .people-intro { max-width: 460px; font-size: 1.125rem; line-height: 1.65; }
-    .people-intro .button { margin-top: 24px; }
-    .people-directory {
-      padding: 62px max(4%, calc((100% - 1440px) / 2)) 88px;
-      background: linear-gradient(135deg, var(--lilac), #ffddea 56%, #e3f3ff);
-    }
-    .people-directory-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin-bottom: 28px; }
-    .people-directory-heading h2 { font-size: clamp(2rem, 3.5vw, 3.25rem); }
-    .people-result-count { color: #59496a; font-size: .9375rem; }
-    .people-search-form { padding: 24px; margin-bottom: 36px; border: 1.5px solid var(--ink); border-radius: 26px; background: var(--white); }
-    .people-search-form label { display: block; margin-bottom: 9px; font-size: .875rem; font-weight: 700; }
-    .people-search-input { position: relative; }
-    .people-search-input svg { position: absolute; left: 17px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; pointer-events: none; }
-    .people-search-input input { width: 100%; min-height: 54px; padding: 13px 16px 13px 50px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper); color: var(--ink); }
-    .people-search-input input::placeholder { color: #74637f; opacity: 1; }
-    .people-search-input input:disabled { opacity: .65; }
-
-
-
-
-
-
-
-
-    .people-state { grid-column: 1 / -1; padding: 48px 28px; border: 1px dashed var(--ink); border-radius: 28px; background: var(--white); text-align: center; }
-    .people-state h3 { margin-bottom: 14px; font-size: 2rem; }
-    .people-state .button { margin-top: 22px; background: var(--white); color: var(--ink); }
-    .people-loading { grid-column: 1 / -1; padding: 30px; font-size: 1.125rem; }
-
-    .primary-nav [aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
-    .menu-button { display: none; background: var(--white); color: var(--ink); }
-    .site-footer :focus-visible { outline-color: var(--yellow); }
-    @media (max-width: 1100px) {
-      .primary-nav { gap: 16px; font-size: .875rem; }
-
-    }
-    @media (max-width: 900px) {
-      .nav-shell { flex-wrap: wrap; padding-block: 16px; }
-      .menu-button { display: inline-flex; }
-      .primary-nav { display: none; width: 100%; flex-direction: column; align-items: stretch; gap: 0; padding-bottom: 8px; }
-      .primary-nav.is-open { display: flex; }
-      .primary-nav > a { padding: 12px; }
-      .primary-nav .nav-button { margin-top: 10px; }
-      .brand-mark { height: 58px; }
-    }
-    @media (max-width: 780px) {
-      .people-hero { padding-block: 42px 48px; }
-      .people-hero-grid { grid-template-columns: 1fr; gap: 28px; }
-      .people-hero h1 { font-size: clamp(2.8rem, 10vw, 4.8rem); }
-      .people-intro { max-width: 620px; }
-      .people-directory { padding: 44px 18px 64px; }
-      .people-directory-heading { display: block; }
-      .people-result-count { margin-top: 12px !important; }
-
-      .people-search-form { padding: 20px; }
-    }
-
-  .people-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-.person-card {
-  width: calc(33.333% - 14px);
-  padding: 18px;
-  border: 1.5px solid var(--ink);
-  border-radius: var(--radius-md);
-  background: var(--white);
-}
-
-.person-portrait {
-  position: relative;
-  display: grid;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  margin-bottom: 24px;
-  overflow: hidden;
-  border: 1.5px solid var(--ink);
-  border-radius: 22px;
-  place-items: center;
-  background: var(--pink);
-}
-
-.person-photo {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: center;
-}
-
-.person-portrait span {
-  position: relative;
-  z-index: 2;
-  font-family: var(--serif);
-  font-size: 4rem;
-  font-weight: 700;
-}
-
-.person-portrait:has(.person-photo) span,
-.person-portrait:has(.person-photo)::before,
-.person-portrait:has(.person-photo)::after {
-  display: none;
-}
-
-.person-portrait:not(:has(.person-photo))::before,
-.person-portrait:not(:has(.person-photo))::after {
-  position: absolute;
-  border: 1.5px solid var(--ink);
-  content: "";
-}
-
-.person-portrait:not(:has(.person-photo))::before {
-  width: 190px;
-  height: 190px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.38);
-}
-
-.person-portrait:not(:has(.person-photo))::after {
-  right: -25px;
-  bottom: -30px;
-  width: 140px;
-  height: 140px;
-  border-radius: 42% 58% 62% 38%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: rotate(18deg);
-}
-
-.person-card > div:last-child {
-  padding: 0 8px 4px;
-}
-
-.person-role {
-  margin-bottom: 10px;
-  opacity: 0.68;
-}
-
-.person-card h3 {
-  margin-bottom: 22px;
-  font-family: var(--serif);
-  font-size: 2rem;
-}
-
-.person-card .tag-list {
-  margin-bottom: 0;
-}
-
-.person-bio {
-  margin-top: 1rem;
-}
-
-.person-bio summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  font-weight: 600;
-  list-style: none;
-}
-
-.person-bio summary::-webkit-details-marker {
-  display: none;
-}
-
-.person-bio summary span {
-  transition: transform 0.2s ease;
-}
-
-.person-bio[open] summary span {
-  transform: rotate(180deg);
-}
-
-.person-bio-content {
-  margin-top: 1rem;
-}
-
-.person-bio-content p {
-  line-height: 1.6;
-}
-
-.person-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.person-links a {
-  font-weight: 600;
-  text-decoration: none;
-}
-.person-role { font-size: .76rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-.person-card { min-width: 0; scroll-margin-top: 24px; }
-.person-card h3 { overflow-wrap: anywhere; }
-.person-card:target { outline: 3px solid var(--purple); outline-offset: 5px; }
-.person-bio-content p { white-space: pre-line; overflow-wrap: anywhere; }
-.people-grid { align-items: flex-start; }
-.people-state, .people-loading { width: 100%; }
-@media (max-width: 900px) { .person-card { width: calc(50% - 10px); } }
-@media (max-width: 680px) { .person-card { width: 100%; } }
-</style>
+  <link rel="stylesheet" href="people.css">
+  <!-- Do not load database.js on this page. -->
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="announcement-bar"><p>Queerposium 2027 underway!</p></div>
-    <div class="nav-shell">
-      <a class="brand" href="index.html" aria-label="Queer Research Network home">
-        <img class="brand-mark" src="assets/QRN_logo_black.png" alt="Queer Research Network">
-        <span class="brand-fallback" hidden>Queer Research Network</span>
-      </a>
-      <button class="button menu-button" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
-      <nav class="primary-nav" id="primary-nav" aria-label="Primary navigation">
-        <a href="index.html">Home</a>
-        <a href="queerposium.html">Queerposium 2026</a>
-        <a href="research.html">Research</a>
-        <a href="index.html#events">Events</a>
-        <a href="people.html" aria-current="page">People</a>
-        <a href="index.html#resources">Resources</a>
-        <a class="nav-button" href="index.html#connect">Join the Network!</a>
-      </nav>
-    </div>
-  </header>
+  <div id="header-container"></div>
+  <script src="/header.js" defer></script>
+
   <main class="people-page" id="main-content">
     <section class="people-hero" aria-labelledby="people-title">
       <div class="wrap people-hero-grid">
         <div>
           <h1 id="people-title">Meet the network.</h1>
         </div>
-
         <div class="people-intro">
-          <p>
-            The people bringing queer scholarship and community together,
-            across disciplines and beyond.
-          </p>
-
+          <p>The people bringing queer scholarship and community together,
+            across disciplines and beyond.</p>
           <a class="button button-outline" href="submit-profile.html">
             Add your researcher profile ↗
           </a>
         </div>
       </div>
     </section>
+
     <section class="people-directory" aria-labelledby="directory-title">
       <h2 id="directory-title" class="sr-only">People directory</h2>
-<p class="sr-only" id="result-count" role="status" aria-live="polite" aria-atomic="true">Loading people…</p>
+      <p class="sr-only" id="result-count" role="status" aria-live="polite" aria-atomic="true">Loading people…</p>
       <form class="people-search-form" role="search" aria-label="Search the people directory">
         <label for="people-search">Search people</label>
         <div class="people-search-input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5"></circle>
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
           <input id="people-search" type="search" placeholder="Name, institution, or keyword" autocomplete="off" aria-controls="people-grid" disabled>
         </div>
       </form>
-      <div class="people-grid" id="people-grid" aria-busy="true"><p class="people-loading">Loading the people behind the network…</p></div>
+      <div class="people-grid" id="people-grid" aria-busy="true">
+        <p class="people-loading">Loading the people behind the network…</p>
+      </div>
       <noscript><p>Please enable JavaScript to load the people directory.</p></noscript>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="footer-brand">
-      <a class="brand" href="index.html" aria-label="Queer Research Network home">
-        <img class="brand-mark" src="assets/QRN_logo_white.png" alt="Queer Research Network">
-        <span class="brand-fallback" hidden>Queer Research Network</span>
-      </a>
-      <p>Queer scholarship. Shared curiosity. Community connections.</p>
-    </div>
-    <div class="footer-links">
-      <div><h3>Explore</h3><a href="research.html">Research</a><a href="index.html#events">Events</a><a href="people.html" aria-current="page">People</a></div>
-      <div><h3>Get involved</h3><a href="index.html#connect">Join the network</a><a href="submit-research.html">Submit your research</a><a href="index.html#resources">Resources</a></div>
-    </div>
-    <div class="footer-bottom">
-      <p>The University of Calgary, located in the heart of Southern Alberta, both acknowledges and pays tribute to the traditional territories of the peoples of Treaty 7, which include the Blackfoot Confederacy (comprised of the Siksika, the Piikani, and the Kainai First Nations), the Tsuut’ina First Nation, and the Stoney Nakoda (including Chiniki, Bearspaw, and Goodstoney First Nations). The city of Calgary is also home to the Métis Nation within Alberta (including Nose Hill Métis District 5 and Elbow Métis District 6).</p>
-      <p>The University of Calgary is situated on land Northwest of where the Bow River meets the Elbow River, a site traditionally known as Moh’kins’tsis to the Blackfoot, Wîchîspa to the Stoney Nakoda, and Guts’ists’i to the Tsuut’ina. On this land and in this place we strive to learn together, walk together, and grow together “in a good way.”</p>
-    </div>
-  </footer>
+
+  <div id="footer-container"></div>
+  <script src="/footer.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (() => {
       'use strict';
+
       const SUPABASE_URL = 'https://shgbntwormbquafuezby.supabase.co';
       const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_yAWT43eYKO_23L4CzjHpew_2Hsotj89';
 
       const grid = document.getElementById('people-grid');
       const count = document.getElementById('result-count');
       const search = document.getElementById('people-search');
-      const menu = document.querySelector('.menu-button');
-      const nav = document.getElementById('primary-nav');
       let people = [], client;
-      const text = value => typeof value === 'string' ? value.trim() : '';
-      const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('en-CA');
-      const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'}[char]));
-      const anchor = person => 'person-' + (text(person.slug) || String(person.id));
-      const initials = name => name.split(/\s+/).filter(Boolean).filter((_, i, words) => i === 0 || i === words.length - 1).map(word => Array.from(word)[0]).join('').toLocaleUpperCase('en-CA');
 
-      function closeMenu() { nav.classList.remove('is-open'); menu.setAttribute('aria-expanded', 'false'); }
-      menu.addEventListener('click', () => menu.setAttribute('aria-expanded', String(nav.classList.toggle('is-open'))));
-      nav.addEventListener('click', event => { if (event.target.closest('a')) closeMenu(); });
-      document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && nav.classList.contains('is-open')) { closeMenu(); menu.focus(); }
-      });
-      document.querySelectorAll('.brand').forEach(brand => {
-        const image = brand.querySelector('img'), fallback = brand.querySelector('.brand-fallback');
-        const hide = () => { image.hidden = true; fallback.hidden = false; };
-        image.addEventListener('error', hide, { once: true });
-        if (image.complete && !image.naturalWidth) hide();
-      });
+      // Shared header is loaded by header.js; no page-specific header listeners here.
+      const normalize = value => String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase('en-CA');
+      const escapeHTML = value => String(value ?? '')
+        .replace(/[&<>"']/g, char => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+        }[char]));
 
-function safeUrl(value) {
-  if (!value) return null;
-  try {
-    const url = new URL(value, window.location.href);
-    if (url.protocol === "http:" || url.protocol === "https:") {
-      return url.href;
-    }
-  } catch (error) {
-    console.warn("Invalid URL:", value);
-  }
-  return null;
-}
-
-function getInitials(name = "") {
-  return name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map(part => part[0])
-    .join("")
-    .toUpperCase();
-}
-
-function getFirstName(name = "") {
-  return name.trim().split(/\s+/)[0] || "this researcher";
-}
-
-function makeTagHTML(tags = []) {
-  if (!tags.length) return "";
-  return tags
-    .map(tag => `<span>${escapeHTML(tag.name)}</span>`)
-    .join("");
-}
-
-function makePersonLinks(person) {
-  const links = [];
-  const website = safeUrl(person.website_url);
-  const orcid = safeUrl(person.orcid_url);
-  const linkedin = safeUrl(person.linkedin_url);
-  if (website) {
-    links.push(`
-      <a href="${escapeHTML(website)}"
-         target="_blank"
-         rel="noopener noreferrer">
-        Website ↗
-      </a>
-    `);
-  }
-  if (orcid) {
-    links.push(`
-      <a href="${escapeHTML(orcid)}"
-         target="_blank"
-         rel="noopener noreferrer">
-        ORCID ↗
-      </a>
-    `);
-  }
-  if (linkedin) {
-    links.push(`
-      <a href="${escapeHTML(linkedin)}"
-         target="_blank"
-         rel="noopener noreferrer">
-        LinkedIn ↗
-      </a>
-    `);
-  }
-  if (!links.length) return "";
-  return `
-    <div class="person-links">
-      ${links.join("")}
-    </div>
-  `;
-}
-
-function makeCard(person) {
-      // --------------------------------------------
-      // Tags
-      // --------------------------------------------
-      const tags = (person.person_tags || [])
-        .map(item => item.tags)
-        .filter(Boolean)
-        .sort((a, b) => a.name.localeCompare(b.name));
-
-      // --------------------------------------------
-      // Name
-      // --------------------------------------------
-      const name = escapeHTML(person.display_name);
-      const pronouns = person.pronouns
-        ? ` (${escapeHTML(person.pronouns)})`
-        : "";
-
-      // --------------------------------------------
-      // Role
-      // --------------------------------------------
-      const roleParts = [];
-      if (person.is_founder) {
-        roleParts.push("Co-founder");
+      function safeUrl(value) {
+        if (!value) return null;
+        try {
+          const url = new URL(value, window.location.href);
+          if (url.protocol === 'http:' || url.protocol === 'https:') return url.href;
+        } catch (error) {
+          console.warn('Invalid URL:', value);
+        }
+        return null;
       }
-      if (person.role_type) {
-        roleParts.push(person.role_type);
-      } else if (person.title) {
-        roleParts.push(person.title);
+
+      function getInitials(name = '') {
+        return name.trim().split(/\s+/).slice(0, 2)
+          .map(part => part[0]).join('').toUpperCase();
       }
-      const role = roleParts
-        .map(escapeHTML)
-        .join(" · ");
 
-      // --------------------------------------------
-      // Portrait
-      // --------------------------------------------
-      let photo = safeUrl(person.photo_url);
-      if (!photo && person.photo_path) {
-        const { data } = client.storage
-          .from("qrn-images")
-          .getPublicUrl(person.photo_path);
-        photo = safeUrl(data?.publicUrl);
+      function getFirstName(name = '') {
+        return name.trim().split(/\s+/)[0] || 'this researcher';
       }
-      const portraitHTML = photo
-        ? `
-          <div class="person-portrait">
-            <img
-              class="person-photo"
-              src="${escapeHTML(photo)}"
-              alt="Portrait of ${name}"
-              loading="lazy"
-            />
-          </div>
-        `
-        : `
-          <div class="person-portrait" aria-hidden="true">
-            <span>${escapeHTML(getInitials(person.display_name))}</span>
-          </div>
-        `;
 
-      // --------------------------------------------
-      // Bio
-      // --------------------------------------------
-      const bio = person.bio || person.short_bio;
-      const bioHTML = bio
-        ? `
-          <details class="person-bio">
-            <summary>
-              About ${escapeHTML(getFirstName(person.display_name))}
-              <span aria-hidden="true">↓</span>
-            </summary>
-            <div class="person-bio-content">
-              <p>${escapeHTML(bio)}</p>
-              ${makePersonLinks(person)}
-            </div>
-          </details>
-        `
-        : "";
+      function makeTagHTML(tags = []) {
+        if (!tags.length) return '';
+        return tags.map(tag => `<span>${escapeHTML(tag.name)}</span>`).join('');
+      }
 
-      // --------------------------------------------
-      // Final card
-      // --------------------------------------------
+      function makePersonLinks(person) {
+        const links = [];
+        const website = safeUrl(person.website_url);
+        const orcid = safeUrl(person.orcid_url);
+        const linkedin = safeUrl(person.linkedin_url);
+
+        if (website) {
+          links.push(`<a href="${escapeHTML(website)}" target="_blank" rel="noopener noreferrer">Website ↗</a>`);
+        }
+        if (orcid) {
+          links.push(`<a href="${escapeHTML(orcid)}" target="_blank" rel="noopener noreferrer">ORCID ↗</a>`);
+        }
+        if (linkedin) {
+          links.push(`<a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>`);
+        }
+        return links.length ? `<div class="person-links">${links.join('')}</div>` : '';
+      }
+
+      function makeCard(person) {
+        const tags = (person.person_tags || [])
+          .map(item => item.tags)
+          .filter(Boolean)
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        const name = escapeHTML(person.display_name);
+        const pronouns = person.pronouns
+          ? ` (${escapeHTML(person.pronouns)})` : '';
+
+        const roleParts = [];
+        if (person.is_founder) roleParts.push('Co-founder');
+        if (person.role_type) roleParts.push(person.role_type);
+        else if (person.title) roleParts.push(person.title);
+        const role = roleParts.map(escapeHTML).join(' · ');
+
+        let photo = safeUrl(person.photo_url);
+        if (!photo && person.photo_path) {
+          const { data } = client.storage
+            .from('qrn-images')
+            .getPublicUrl(person.photo_path);
+          photo = safeUrl(data?.publicUrl);
+        }
+
+        const portraitHTML = photo
+          ? `<div class="person-portrait">
+               <img class="person-photo" src="${escapeHTML(photo)}"
+                    alt="Portrait of ${name}" loading="lazy" />
+             </div>`
+          : `<div class="person-portrait" aria-hidden="true">
+               <span>${escapeHTML(getInitials(person.display_name))}</span>
+             </div>`;
+
+        const bio = person.bio || person.short_bio;
+        const bioHTML = bio
+          ? `<details class="person-bio">
+               <summary>About ${escapeHTML(getFirstName(person.display_name))}
+                 <span aria-hidden="true">↓</span>
+               </summary>
+               <div class="person-bio-content">
+                 <p>${escapeHTML(bio)}</p>
+                 ${makePersonLinks(person)}
+               </div>
+             </details>`
+          : '';
+
         return `
-          <article
-            class="person-card"
-            id="person-${escapeHTML(person.slug)}"
-          >
-          ${portraitHTML}
-          <div class="person-card-content">
-            ${
-              role
-                ? `<p class="person-role">${role}</p>`
-                : ""
-            }
-            <h3>${name}${pronouns}</h3>
-            ${
-              tags.length
-                ? `
-                  <div
-                    class="tag-list"
-                    aria-label="Research interests"
-                  >
-                    ${makeTagHTML(tags)}
-                  </div>
-                `
-                : ""
-            }
-            ${bioHTML}
-          </div>
-        </article>
-      `;
-}
+          <article class="person-card" id="person-${escapeHTML(person.slug)}">
+            ${portraitHTML}
+            <div class="person-card-content">
+              ${role ? `<p class="person-role">${role}</p>` : ''}
+              <h3>${name}${pronouns}</h3>
+              ${tags.length
+                ? `<div class="tag-list" aria-label="Research interests">${makeTagHTML(tags)}</div>`
+                : ''}
+              ${bioHTML}
+            </div>
+          </article>
+        `;
+      }
+
       function attachPhotoFallbacks() {
         grid.querySelectorAll('.person-photo').forEach(image => {
           const fallback = () => {
@@ -537,73 +199,78 @@ function makeCard(person) {
           if (image.complete && !image.naturalWidth) fallback();
         });
       }
+
       function render() {
         const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
         const matches = people.filter(person => {
-          const haystack = normalize([person.display_name, person.pronouns, person.role_type, person.title, person.institution, person.faculty, person.department, person.bio, person.short_bio, ...(person.person_tags || []).map(item => item.tags?.name)].filter(Boolean).join(' '));
+          const haystack = normalize([
+            person.display_name, person.pronouns, person.role_type,
+            person.title, person.institution, person.faculty,
+            person.department, person.bio, person.short_bio,
+            ...(person.person_tags || []).map(item => item.tags?.name)
+          ].filter(Boolean).join(' '));
           return terms.every(term => haystack.includes(term));
         });
-        count.textContent = `${matches.length} ${matches.length === 1 ? 'person' : 'people'}${terms.length ? ` of ${people.length}` : ''}`;
-        grid.innerHTML = matches.length ? matches.map(makeCard).join('') : `<div class="people-state">
-          <h3>${people.length ? 'No matches just yet.' : 'Meet us here soon.'}</h3>
-          <p>${people.length ? 'Try another name or keyword, or clear your search.' : 'Published profiles will appear here as people join the directory.'}</p>
-        </div>`;
+
+        count.textContent = `${matches.length} ${matches.length === 1 ? 'person' : 'people'}`
+          + (terms.length ? ` of ${people.length}` : '');
+        grid.innerHTML = matches.length
+          ? matches.map(makeCard).join('')
+          : `<div class="people-state">
+               <h3>${people.length ? 'No matches just yet.' : 'Meet us here soon.'}</h3>
+               <p>${people.length
+                 ? 'Try another name or keyword, or clear your search.'
+                 : 'Published profiles will appear here as people join the directory.'}</p>
+             </div>`;
         attachPhotoFallbacks();
       }
+
       function scrollToProfile() {
         try {
           const id = decodeURIComponent(window.location.hash.slice(1));
-          if (id.startsWith('person-')) document.getElementById(id)?.scrollIntoView({ block: 'start' });
+          if (id.startsWith('person-')) {
+            document.getElementById(id)?.scrollIntoView({ block: 'start' });
+          }
         } catch { /* Ignore malformed fragments. */ }
       }
+
       async function loadPeople() {
         search.disabled = true;
         grid.setAttribute('aria-busy', 'true');
         grid.innerHTML = '<p class="people-loading">Loading the people behind the network…</p>';
         count.textContent = 'Loading people…';
         try {
-          if (!window.supabase?.createClient) throw new Error('Supabase library could not be loaded.');
-          client ||= window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+          if (!window.supabase?.createClient) {
+            throw new Error('Supabase library could not be loaded.');
+          }
+          client ||= window.supabase.createClient(
+            SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY,
+            { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+          );
+
           const selection = `
-      id,
-      slug,
-      display_name,
-      pronouns,
-      role_type,
-      title,
-      institution,
-      faculty,
-      department,
-      short_bio,
-      bio,
-      website_url,
-      orcid_url,
-      linkedin_url,
-      photo_url,
-      photo_path,
-      is_founder,
-      is_featured,
-      display_order,
-      person_tags (
-        tags (
-          id,
-          name,
-          slug,
-          category
-        )
-      )
-    `;
+            id, slug, display_name, pronouns, role_type, title,
+            institution, faculty, department, short_bio, bio,
+            website_url, orcid_url, linkedin_url, photo_url,
+            photo_path, is_founder, is_featured, display_order,
+            person_tags ( tags ( id, name, slug, category ) )
+          `;
+
           const all = [], pageSize = 500;
           let from = 0;
           while (true) {
             const { data, error } = await client.from('people').select(selection)
-              .eq('status', 'published').order('display_order', { ascending: true }).order('display_name', { ascending: true })
-              .order('id', { ascending: true }).range(from, from + pageSize - 1);
+              .eq('status', 'published')
+              .order('display_order', { ascending: true })
+              .order('display_name', { ascending: true })
+              .order('id', { ascending: true })
+              .range(from, from + pageSize - 1);
             if (error) throw error;
             all.push(...(data || []));
             if (!data || data.length < pageSize) break;
             from += pageSize;
           }
+
           people = all;
           search.disabled = false;
           render();
@@ -611,13 +278,22 @@ function makeCard(person) {
         } catch (error) {
           console.error('Could not load the people directory:', error);
           count.textContent = 'People are temporarily unavailable.';
-          grid.innerHTML = `<div class="people-state"><h3>Let’s try that again.</h3><p>We couldn’t load the directory. Please try again in a moment.</p><button class="button" id="retry-people" type="button">Try again</button></div>`;
+          grid.innerHTML = `<div class="people-state">
+            <h3>Let’s try that again.</h3>
+            <p>We couldn’t load the directory. Please try again in a moment.</p>
+            <button class="button" id="retry-people" type="button">Try again</button>
+          </div>`;
           document.getElementById('retry-people').addEventListener('click', () => {
-            if (window.supabase?.createClient) loadPeople(); else window.location.reload();
+            if (window.supabase?.createClient) loadPeople();
+            else window.location.reload();
           });
-        } finally { grid.setAttribute('aria-busy', 'false'); }
+        } finally {
+          grid.setAttribute('aria-busy', 'false');
+        }
       }
-      document.querySelector('.people-search-form').addEventListener('submit', event => event.preventDefault());
+
+      document.querySelector('.people-search-form')
+        .addEventListener('submit', event => event.preventDefault());
       search.addEventListener('input', render);
       window.addEventListener('hashchange', scrollToProfile);
       loadPeople();

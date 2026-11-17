@@ -1,0 +1,253 @@
+/* ============================================================
+   PEOPLE DIRECTORY PAGE
+   Load after styles.css. Header and footer styles remain shared.
+   ============================================================ */
+
+[hidden] { display: none !important; }
+
+.people-page button,
+.people-page input { font: inherit; }
+.people-page button { cursor: pointer; }
+
+/* HERO */
+.people-hero {
+  padding-block: 68px 64px;
+  border-bottom: 1px solid var(--line);
+}
+.people-hero h1 {
+  margin: 0;
+  font-family: var(--serif);
+  line-height: 1.12;
+  letter-spacing: -.04em;
+  font-size: clamp(3.2rem, 6.8vw, 6.5rem);
+}
+.people-hero h1 em { color: var(--purple); }
+.people-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .7fr;
+  gap: 7vw;
+  align-items: end;
+}
+.people-eyebrow {
+  margin-bottom: 20px !important;
+  font-size: .8125rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.people-intro {
+  max-width: 460px;
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+.people-intro p { margin: 0; }
+.people-intro .button { margin-top: 24px; }
+
+/* DIRECTORY */
+.people-directory {
+  padding: 62px max(4%, calc((100% - 1440px) / 2)) 88px;
+  background: linear-gradient(135deg, var(--lilac), #ffddea 56%, #e3f3ff);
+}
+.people-directory-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.people-directory-heading h2 { font-size: clamp(2rem, 3.5vw, 3.25rem); }
+.people-result-count { color: #59496a; font-size: .9375rem; }
+.people-search-form {
+  padding: 24px;
+  margin-bottom: 36px;
+  border: 1.5px solid var(--ink);
+  border-radius: 26px;
+  background: var(--white);
+}
+.people-search-form label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: .875rem;
+  font-weight: 700;
+}
+.people-search-input { position: relative; }
+.people-search-input svg {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}
+.people-search-input input {
+  width: 100%;
+  min-height: 54px;
+  padding: 13px 16px 13px 50px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.people-search-input input::placeholder { color: #74637f; opacity: 1; }
+.people-search-input input:disabled { opacity: .65; }
+.people-state {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 48px 28px;
+  border: 1px dashed var(--ink);
+  border-radius: 28px;
+  background: var(--white);
+  text-align: center;
+}
+.people-state h3 { margin-bottom: 14px; font-size: 2rem; }
+.people-state .button { margin-top: 22px; background: var(--white); color: var(--ink); }
+.people-loading { grid-column: 1 / -1; width: 100%; padding: 30px; font-size: 1.125rem; }
+
+/* PEOPLE GRID AND CARDS */
+.people-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  align-items: flex-start;
+}
+.person-card {
+  width: calc(33.333% - 14px);
+  min-width: 0;
+  padding: 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  scroll-margin-top: 24px;
+}
+.person-card:target { outline: 3px solid var(--purple); outline-offset: 5px; }
+.person-portrait {
+  position: relative;
+  display: grid;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1.5px solid var(--ink);
+  border-radius: 22px;
+  place-items: center;
+  background: var(--pink);
+}
+.person-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+}
+.person-portrait span {
+  position: relative;
+  z-index: 2;
+  font-family: var(--serif);
+  font-size: 4rem;
+  font-weight: 700;
+}
+.person-portrait:has(.person-photo) span,
+.person-portrait:has(.person-photo)::before,
+.person-portrait:has(.person-photo)::after { display: none; }
+.person-portrait:not(:has(.person-photo))::before,
+.person-portrait:not(:has(.person-photo))::after {
+  position: absolute;
+  border: 1.5px solid var(--ink);
+  content: "";
+}
+.person-portrait:not(:has(.person-photo))::before {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .38);
+}
+.person-portrait:not(:has(.person-photo))::after {
+  right: -25px;
+  bottom: -30px;
+  width: 140px;
+  height: 140px;
+  border-radius: 42% 58% 62% 38%;
+  background: rgba(255, 255, 255, .5);
+  transform: rotate(18deg);
+}
+.person-card > div:last-child { padding: 0 8px 4px; }
+.person-role {
+  margin-bottom: 10px;
+  opacity: .68;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.person-card h3 {
+  margin-bottom: 22px;
+  font-family: var(--serif);
+  font-size: 2rem;
+  overflow-wrap: anywhere;
+}
+.person-card .tag-list { margin-bottom: 0; }
+.person-bio { margin-top: 1rem; }
+.person-bio summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+.person-bio summary::-webkit-details-marker { display: none; }
+.person-bio summary span { transition: transform .2s ease; }
+.person-bio[open] summary span { transform: rotate(180deg); }
+.person-bio-content { margin-top: 1rem; }
+.person-bio-content p {
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.person-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.person-links a { font-weight: 600; text-decoration: none; }
+
+/* RESPONSIVE PAGE CONTENT (NOT THE SHARED HEADER) */
+@media (max-width: 900px) {
+  .person-card { width: calc(50% - 10px); }
+}
+@media (max-width: 780px) {
+  .people-hero { padding-block: 42px 48px; }
+  .people-hero-grid { grid-template-columns: 1fr; gap: 28px; }
+  .people-hero h1 { font-size: clamp(2.8rem, 10vw, 4.8rem); }
+  .people-intro { max-width: 620px; }
+  .people-directory { padding: 44px 18px 64px; }
+  .people-directory-heading { display: block; }
+  .people-result-count { margin-top: 12px !important; }
+  .people-search-form { padding: 20px; }
+}
+@media (max-width: 680px) {
+  .person-card { width: 100%; }
+}
+
+/* RESEARCH INTEREST TAGS */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.tag-list span {
+  padding: 7px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}

@@ -19,35 +19,10 @@
 </head>
 <body class="home-page">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="announcement-bar">
-      <p>
-        <span aria-hidden="true"></span>
-        Queerposium 2027 underway!
-      </p>
-      <!-- <a href="#connect">Get involved <span aria-hidden="true">↗</span></a> -->
-    </div>
-    <div class="nav-shell">
-      <a class="brand" href="" aria-label="Queer Research Network home">
-        <img class="brand-mark" src="assets/QRN_logo_black.png" alt="" aria-hidden="true" />
-      </a>
-      <input class="nav-toggle" type="checkbox" id="nav-toggle" />
-      <label class="nav-toggle-label" for="nav-toggle">
-        <span class="sr-only">Toggle navigation</span>
-        <span></span><span></span>
-      </label>
-      <nav class="primary-nav" aria-label="Primary navigation">        
-        <a href="index.html">Home</a>
-        <a href="queerposium.html">Queerposium 2026</a>
-        <!-- <a href="#about">About</a> -->
-        <a href="research.html">Research</a>
-        <a href="#events">Events</a>
-        <a href="people.html">People</a>
-        <a href="#resources">Resources</a>
-        <a class="nav-button" href="#connect">Join the Network!</a>
-      </nav>
-    </div>
-  </header>
+
+  <div id="header-container"></div>
+  <script src="/header.js" defer></script>
+  
   <main id="main-content">
     <section class="hero" id="top">
       <div class="hero-copy">
@@ -103,17 +78,17 @@
       </div>
       <div class="values-grid">
         <article class="value-card value-lilac">
-          <span class="card-number">03</span>
+          <span class="card-number">01</span>
           <h3>Elevate</h3>
           <p>Share and celebrate queer research.</p>
         </article>
         <article class="value-card value-yellow">
-          <span class="card-number">01</span>
+          <span class="card-number">02</span>
           <h3>Connect</h3>
           <p>Build relationships with scholars across disciplines and lived experience.</p>
         </article>
         <article class="value-card value-mint">
-          <span class="card-number">02</span>
+          <span class="card-number">03</span>
           <h3>Collaborate</h3>
           <p>Break out of silos to build transdisciplinary networks.</p>
         </article>
@@ -128,15 +103,6 @@
           <div class="section-label">02 / Queer research</div>
 
           <h2>The Gay Agenda <em>(of Research)</em></h2>
-
-          <h4>
-            What do we think about this ^ ? I think it’s funny as a reclamation
-            from homophobic roots, but I want to make sure it lands comfortably...
-          </h4>
-
-          <h4>
-            What about the paragraph below? motivation for importance of queer research 
-          </h4>
 
           <div class="research-intro">
             <p>
@@ -238,64 +204,22 @@
         <h2>Bring your research, ideas, and curiosity.</h2>
         <p>
           Join the mailing list for events, opportunities, research calls, and opportunites for collaboration.
-          Make this so that it leads to the microsoft form
         </p>
-        <form class="signup-form" action="#" method="post">
-          <label class="sr-only" for="email">Email address</label>
-          <input id="email" type="email" name="email" placeholder="Email address" required />
-          <button type="submit">Join the Network!<span aria-hidden="true">→</span></button>
-        </form>
+        <a
+          href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=7KAJxuOlMUaWhhkigL2RUbtueihBSt9Picqrnb887gtUMUtVWUZZM0RPVTFEOVdIR0JNRktCRlJOSyQlQCN0PWcu"
+          class="join-button"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Join the Network! <span aria-hidden="true">→</span>
+        </a>
       </div>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="footer-brand">
-      <a class="brand" href="" aria-label="Queer Research Network home">
-        <img class="brand-mark" src="assets/QRN_logo_white.png" alt="" aria-hidden="true" />
-      </a>
-       <h4> Add other logos</h4>
-    </div>
-    <div class="footer-links">
-      <div>
-        <h3>Explore</h3>
-        <!-- <a href="#about">About</a> -->
-        <a href="research.html">Research</a>
-        <a href="#events">Events</a>
-        <a href="#people">People</a>
-      </div>
-      <div>
-        <h3>Social Media</h3>
-        <a href="mailto:hello@example.ca">Email</a>
-        <a href="#">Instagram?</a>
-        <a href="#">LinkedIn?</a>
-        <a href="#">Other social media?</a>
-      </div>
-    </div>
-<div class="footer-bottom">
 
-  <p>
-    The University of Calgary, located in the heart of Southern
-    Alberta, both acknowledges and pays tribute to the traditional
-    territories of the peoples of Treaty 7, which include the
-    Blackfoot Confederacy (comprised of the Siksika, the Piikani,
-    and the Kainai First Nations), the Tsuut’ina First Nation, and
-    the Stoney Nakoda (including Chiniki, Bearspaw, and Goodstoney
-    First Nations). The city of Calgary is also home to the Métis
-    Nation within Alberta (including Nose Hill Métis District 5 and
-    Elbow Métis District 6).
-  </p>
 
-  <p>
-    The University of Calgary is situated on land Northwest of where
-    the Bow River meets the Elbow River, a site traditionally known
-    as Moh’kins’tsis to the Blackfoot, Wîchîspa to the Stoney Nakoda,
-    and Guts’ists’i to the Tsuut’ina. On this land and in this place
-    we strive to learn together, walk together, and grow together
-    “in a good way.”
-  </p>
-
-</div>
-  </footer>
+  <div id="footer-container"></div>
+<script src="/footer.js" defer></script>
 
   <script>
     // Keep an initials portrait when a profile image cannot be loaded.

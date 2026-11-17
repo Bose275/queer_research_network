@@ -67,6 +67,10 @@ main > section {
   isolation: isolate;
 }
 
+body.queerposium-page {
+  overflow-x: clip;
+}
+
 main > section::before {
   position: absolute;
   top: 0;

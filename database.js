@@ -607,12 +607,10 @@ async function loadResearch() {
 // 6. EVENTS
 // ============================================================
 
+
 async function loadEvents() {
   const container = document.querySelector(".event-list");
-
   if (!container) return;
-
-  const now = new Date().toISOString();
 
   const { data: events, error } = await db
     .from("events")
@@ -622,116 +620,184 @@ async function loadEvents() {
       title,
       event_type,
       short_description,
+      description,
       starts_at,
       ends_at,
       timezone,
       venue_name,
+      address_text,
       registration_url,
+      image_url,
       is_featured
     `)
     .eq("status", "published")
-    .gte("starts_at", now)
+    .gte("starts_at", new Date().toISOString())
     .order("starts_at", { ascending: true })
     .limit(4);
 
   if (error) {
     console.error("Could not load events:", error);
-
-    showLoadError(
-      container,
-      "We couldn't load upcoming events right now."
-    );
-
+    showLoadError(container, "We couldn't load upcoming events.");
     return;
   }
 
-  if (!events || events.length === 0) {
+  if (!events?.length) {
     container.innerHTML = `
-      <p class="database-message">
-        More events are coming soon.
-      </p>
+      <p class="database-message">More events are coming soon.</p>
     `;
-
     return;
   }
 
-  container.innerHTML = events
-    .map(event => {
+  container.innerHTML = events.map(event => {
+    const date = new Date(event.starts_at);
+    const timezone = event.timezone || "America/Edmonton";
 
-      const date = new Date(event.starts_at);
+    const month = new Intl.DateTimeFormat("en-CA", {
+      month: "short",
+      timeZone: timezone
+    }).format(date).toUpperCase();
 
-      const timezone =
-        event.timezone || "America/Edmonton";
+    const day = new Intl.DateTimeFormat("en-CA", {
+      day: "2-digit",
+      timeZone: timezone
+    }).format(date);
 
-      const month = new Intl.DateTimeFormat(
-        "en-CA",
-        {
-          month: "short",
-          timeZone: timezone
-        }
-      )
-        .format(date)
-        .toUpperCase();
+    const dateText = new Intl.DateTimeFormat("en-CA", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      timeZone: timezone
+    }).format(date);
 
-      const day = new Intl.DateTimeFormat(
-        "en-CA",
-        {
-          day: "2-digit",
-          timeZone: timezone
-        }
-      ).format(date);
+    const timeFormatter = new Intl.DateTimeFormat("en-CA", {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: timezone
+    });
 
-      const registrationURL =
-        safeUrl(event.registration_url);
+    const startTime = timeFormatter.format(date);
+    const endTime = event.ends_at
+      ? timeFormatter.format(new Date(event.ends_at))
+      : null;
 
-      const linkHTML = registrationURL
-        ? `
-          <a
-            href="${escapeHTML(registrationURL)}"
-            aria-label="View ${escapeHTML(event.title)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ↗
-          </a>
-        `
-        : `
-          <span aria-hidden="true"></span>
-        `;
+    const description =
+      event.description || event.short_description || "";
 
-      return `
-        <article class="event-item">
+    const location = event.venue_name || "";
+
+    const registrationURL = safeUrl(event.registration_url);
+    const imageURL = safeUrl(event.image_url);
+
+    return `
+      <details
+        class="event-item"
+        id="event-${escapeHTML(event.slug)}"
+      >
+
+        <summary class="event-summary">
 
           <time datetime="${escapeHTML(event.starts_at)}">
             <span>${escapeHTML(month)}</span>
             ${escapeHTML(day)}
           </time>
 
-          <div>
+          <div class="event-summary-copy">
+            ${event.event_type ? `
+              <p class="content-type">
+                ${escapeHTML(event.event_type)}
+              </p>
+            ` : ""}
 
-            ${
-              event.event_type
-                ? `
-                  <p class="content-type">
-                    ${escapeHTML(event.event_type)}
-                  </p>
-                `
-                : ""
-            }
+            <h3>${escapeHTML(event.title)}</h3>
 
-            <h3>
-              ${escapeHTML(event.title)}
-            </h3>
+            ${event.short_description ? `
+              <p class="event-preview">
+                ${escapeHTML(event.short_description)}
+              </p>
+            ` : ""}
+          </div>
+
+          <span class="event-toggle" aria-hidden="true">↓</span>
+
+        </summary>
+
+        <div class="event-details">
+
+          <div class="event-details-content">
+
+            <div class="event-meta">
+              <p><strong>Day:</strong> ${escapeHTML(dateText)}</p>
+
+              <p>
+                <strong>Time:</strong>
+                ${escapeHTML(startTime)}
+                ${endTime ? ` – ${escapeHTML(endTime)}` : ""}
+              </p>
+
+              ${location ? `
+                <p><strong>Where:</strong> ${escapeHTML(location)}</p>
+              ` : ""}
+            </div>
+
+            ${description ? `
+              <div class="event-description">
+                <p>${escapeHTML(description)}</p>
+              </div>
+            ` : ""}
+
+            ${imageURL ? `
+              <img
+                class="event-poster"
+                src="${escapeHTML(imageURL)}"
+                alt="Poster for ${escapeHTML(event.title)}"
+                loading="lazy"
+              >
+            ` : ""}
+
+            ${registrationURL ? `
+              <a
+                class="button button-primary event-register"
+                href="${escapeHTML(registrationURL)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Register for this event ↗
+              </a>
+            ` : ""}
 
           </div>
 
-          ${linkHTML}
+        </div>
 
-        </article>
-      `;
-    })
-    .join("");
+      </details>
+    `;
+  }).join("");
+
+
+
+  // Open the event linked from the announcement bar
+  const eventId = decodeURIComponent(
+    window.location.hash.slice(1)
+  );
+
+  if (eventId.startsWith("event-")) {
+    const target = document.getElementById(eventId);
+
+    if (target?.matches("details.event-item")) {
+      target.open = true;
+
+      requestAnimationFrame(() => {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      });
+    }
+  }
+
 }
+
 
 
 // ============================================================
