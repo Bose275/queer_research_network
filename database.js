@@ -154,7 +154,11 @@ async function loadPeople() {
     return;
   }
 
-  if (!people || people.length === 0) {
+  const visiblePeople = document.body.classList.contains("home-page")
+    ? (people || []).filter(person => person.is_founder === true)
+    : (people || []);
+
+  if (visiblePeople.length === 0) {
     container.innerHTML = `
       <p class="database-message">
         Researcher profiles are coming soon.
@@ -164,8 +168,7 @@ async function loadPeople() {
     return;
   }
 
-  container.innerHTML = people
-    .map(person => {
+  container.innerHTML = visiblePeople.map(person => {
 
       // --------------------------------------------
       // Tags
@@ -194,7 +197,10 @@ async function loadPeople() {
 
       const roleParts = [];
 
-      if (person.is_founder) {
+      if (
+        person.is_founder &&
+        !document.body.classList.contains("home-page")
+      ) {
         roleParts.push("Co-founder");
       }
 
