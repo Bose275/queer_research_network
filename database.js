@@ -154,8 +154,28 @@ async function loadPeople() {
     return;
   }
 
-  const visiblePeople = document.body.classList.contains("home-page")
-    ? (people || []).filter(person => person.is_founder === true)
+  const isHomePage = document.body.classList.contains("home-page");
+
+  const founderOrder = [
+    "Emma Farago",
+    "Robyn Mae Paul",
+    "Tonya Callaghan",
+    "Jamie Anderson",
+    "Josiah Lansang"
+  ];
+
+  const visiblePeople = isHomePage
+    ? (people || [])
+        .filter(person => person.is_founder === true)
+        .sort((a, b) => {
+          const aIndex = founderOrder.indexOf(a.display_name);
+          const bIndex = founderOrder.indexOf(b.display_name);
+
+          return (
+            (aIndex === -1 ? Infinity : aIndex) -
+            (bIndex === -1 ? Infinity : bIndex)
+          );
+        })
     : (people || []);
 
   if (visiblePeople.length === 0) {
